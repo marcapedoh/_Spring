@@ -40,13 +40,15 @@ public class MvtStkDAO {
         if(mvtStkDAO==null){
             return null;
         }
-        return MvtStk.builder()
-                .article(ArticleDAO.toEntity(mvtStkDAO.getArticle()))
-                .dateMvt(mvtStkDAO.getDateMvt())
-                .typeMvt(mvtStkDAO.getTypeMvt())
-                .sourceMvtStk(mvtStkDAO.getSourceMvtStk())
-                .quantite(mvtStkDAO.getQuantite())
-                .build();
+        MvtStk mvtStk = new MvtStk();
+        mvtStk.setId(mvtStkDAO.getId());
+        mvtStk.setDateMvt(mvtStkDAO.getDateMvt());
+        mvtStk.setQuantite(mvtStkDAO.getQuantite());
+        mvtStk.setArticle(ArticleDAO.toEntity(mvtStkDAO.getArticle()));
+        mvtStk.setTypeMvt(mvtStkDAO.getTypeMvt());
+        mvtStk.setSourceMvtStk(mvtStkDAO.getSourceMvtStk());
+
+        return mvtStk;
     }
     public boolean isCommandeLivreePartiellement() {
         return TypeMvtStk.ENTREE_PARTIEL.equals(this.typeMvt);

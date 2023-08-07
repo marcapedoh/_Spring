@@ -1,6 +1,7 @@
 package com.gestiondestock.spring.Controller;
 
 import com.gestiondestock.spring.Controller.API.UtilisateurAPI;
+import com.gestiondestock.spring.DAO.ChangerMotDePasseUtilisateurDAO;
 import com.gestiondestock.spring.DAO.UtilisateurDAO;
 import com.gestiondestock.spring.Repository.UtilisateurRepository;
 import com.gestiondestock.spring.Services.UtilisateurServices;
@@ -34,6 +35,11 @@ public class UtilisateurController implements UtilisateurAPI {
     @Override
     public UtilisateurDAO findByNom(String nom) {
         return utilisateurServices.findByNom(nom);
+    }
+
+    @Override
+    public UtilisateurDAO changerMotDePasse(ChangerMotDePasseUtilisateurDAO dto) {
+        return utilisateurServices.changerMotDePasse(dto);
     }
 
     @Override

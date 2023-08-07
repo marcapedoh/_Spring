@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class CommandeFournisseurDAO {
     private Instant dateCommande;
     private EtatCommande etatCommande;
     private FournisseurDAO fournisseur;
-    @JsonIgnore
+
     private List<LigneDeCommandeFournisseurDAO> ligneCommandeFournisseurs;
 
     public static CommandeFournisseurDAO fromEntity(CommandeFournisseur commandeFournisseur){
@@ -36,16 +38,17 @@ public class CommandeFournisseurDAO {
                 .build();
     }
 
-    public static CommandeFournisseur toEntity(CommandeFournisseurDAO commandeClientDAO){
-        if(commandeClientDAO==null){
+    public static CommandeFournisseur toEntity(CommandeFournisseurDAO commandeFournisseurDAO){
+        if(commandeFournisseurDAO==null){
             return null;
         }
-        return CommandeFournisseur.builder()
-                .code(commandeClientDAO.getCode())
-                .dateCommande(commandeClientDAO.getDateCommande())
-                .etatCommande(commandeClientDAO.getEtatCommande())
-                .fournisseur(FournisseurDAO.toEntity(commandeClientDAO.getFournisseur()))
-                .build();
+        CommandeFournisseur commandeFournisseur = new CommandeFournisseur();
+        commandeFournisseur.setId(commandeFournisseurDAO.getId());
+        commandeFournisseur.setCode(commandeFournisseurDAO.getCode());
+        commandeFournisseur.setDateCommande(commandeFournisseurDAO.getDateCommande());
+        commandeFournisseur.setFournisseur(FournisseurDAO.toEntity(commandeFournisseurDAO.getFournisseur()));
+        commandeFournisseur.setEtatCommande(commandeFournisseurDAO.getEtatCommande());
+        return commandeFournisseur;
     }
     public boolean isCommandeLivree() {
         return EtatCommande.LIVREE.equals(this.etatCommande);

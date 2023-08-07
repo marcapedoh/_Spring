@@ -1,9 +1,6 @@
 package com.gestiondestock.spring.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,6 +40,7 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
     @Column(name = "Pays")
     private String pays;
     @Column(name = "roleUser")
+    /*@Enumerated(EnumType.STRING)*/
     private ERoles roles;
 
     @Override
@@ -52,31 +50,31 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return motDePasse;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return mail;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

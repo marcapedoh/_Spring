@@ -20,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.gestiondestock.spring.Constants.Utils.APP_ROOT;
 
@@ -36,23 +38,39 @@ public class CrossOriginConfiguration implements WebMvcConfigurer {
                 .exposedHeaders("Authorization")
         ;
     }
-}*/
+
+}
+ */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CrossOriginConfiguration implements Filter {
 
+    public CrossOriginConfiguration() {
+    }
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        final HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, enctype, verification-url");
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        Map<String, String> map = new HashMap<>();
+        String originHeader = request.getHeader("origin");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        if (HttpMethod.OPTIONS.name().equalsIgnoreCase(((HttpServletRequest) req).getMethod())) {
+        response.setHeader("Access-Control-Allow-Headers", "*");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             chain.doFilter(req, res);
         }
+    }
 
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
+
+    @Override
+    public void destroy() {
     }
 }

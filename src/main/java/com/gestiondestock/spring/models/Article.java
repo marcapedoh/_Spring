@@ -28,12 +28,11 @@ public class Article extends AbstractEntity{
     private BigDecimal prixUnitaireTTC;
     @Column(name = "photo")
     private String photo;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "idCategory")
     private Category category;
     @OneToMany(mappedBy = "article")
     private List<LigneVente> ligneVentes;
-
     @OneToMany(mappedBy = "article")
     private List<LigneDeCommandeClient> ligneCommandeClients;
 
@@ -42,4 +41,8 @@ public class Article extends AbstractEntity{
 
     @OneToMany(mappedBy = "article")
     private List<MvtStk> mvtStks;
+
+    @ManyToOne
+    @JoinColumn(name = "nomUtilisateur")
+    private Utilisateur utilisateur;
 }

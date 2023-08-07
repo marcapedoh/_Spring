@@ -49,7 +49,7 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
     }
     @Override
     public CommandeClientDAO save(CommandeClientDAO commandeClientDAO) {
-        List<String>errors= CommandeClientValidator.validate(commandeClientDAO);
+        List<String> errors=CommandeClientValidator.validate(commandeClientDAO);
         if(!errors.isEmpty()){
             log.error("vous passer {} nul en parametre pour qu'on l'enregistre vous etes bizzare aussi hein",commandeClientDAO);
         }
@@ -64,8 +64,8 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
         List<String>articlesErrors=new ArrayList<>();
         if(commandeClientDAO.getListeCommandeClient()!=null){
             commandeClientDAO.getListeCommandeClient().forEach(ligCmdClt->{
-                if(ligCmdClt!=null){
-                    Optional<Article>article=articleRepository.findById(ligCmdClt.getArticle().getId());
+                if(ligCmdClt.getArticle()!=null){
+                    Optional<Article> article =articleRepository.findById(ligCmdClt.getArticle().getId());
                     if(article.isEmpty()){
                         articlesErrors.add("l'article aek ID "+ligCmdClt.getArticle().getId()+" n'existe pas");
                     }
@@ -75,22 +75,24 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
             });
         }
         if(!articlesErrors.isEmpty()){
-            log.warn("");
+            log.warn("error auncun article trouvé");
             throw new InvalidEntityException("l'article n'existe pas dans la base de donnée", ErrorCodes.Article_Not_Valid,articlesErrors);
         }
+        commandeClientDAO.setDateCommande(Instant.now());
         CommandeClient commandeClient = CommandeClientDAO.toEntity(commandeClientDAO);
         Client clientFound = client.orElseThrow(() -> new EntityNotFoundException("Client non trouvé"));
         commandeClient.setClient(clientFound);
-        //CommandeClient commandeClient=commandeClientRepository.save(CommandeClientDAO.toEntity(commandeClientDAO));
+        CommandeClient commandeClientSaved=commandeClientRepository.save(CommandeClientDAO.toEntity(commandeClientDAO));
+
         if(commandeClientDAO.getListeCommandeClient()!=null){
             commandeClientDAO.getListeCommandeClient().forEach(ligneDeCommandeClient -> {
                 LigneDeCommandeClient ligneDeCommandeClient1= LigneDeCommandeClientDAO.toEntity(ligneDeCommandeClient);
-                ligneDeCommandeClient1.setCommandeClient(commandeClient);
+                ligneDeCommandeClient1.setCommandeClient(commandeClientSaved);
                 LigneDeCommandeClient ligneDeCommandeClient2= ligneDeCommandeClientRepository.save(ligneDeCommandeClient1);
                 effectuerSortie(ligneDeCommandeClient2);
             });
         }
-        return CommandeClientDAO.fromEntity(commandeClientRepository.save( commandeClient));
+        return CommandeClientDAO.fromEntity(commandeClientSaved);
     }
 
     @Override

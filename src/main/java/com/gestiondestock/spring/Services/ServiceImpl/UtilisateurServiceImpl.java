@@ -94,7 +94,7 @@ public class UtilisateurServiceImpl implements UtilisateurServices {
 
     @Override
     public UtilisateurDAO findByMail(String mail) {
-        if(StringUtils.hasLength(mail)){
+        if(!StringUtils.hasLength(mail)){
             log.error("pour vous connectez vous avez besoin de fournir votre mail");
         }
         Optional<Utilisateur>utilisateur=utilisateurRepository.findUtilisateurByMail(mail);

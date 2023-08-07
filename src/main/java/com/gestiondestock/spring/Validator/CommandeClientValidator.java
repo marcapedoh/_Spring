@@ -9,22 +9,19 @@ import java.util.List;
 
 public class CommandeClientValidator {
 
-    public static List<String> validate(CommandeClientDAO clientDAO){
+    public static List<String> validate(CommandeClientDAO commandeClientDAO){
         List<String> errors=new ArrayList<>();
 
-        if(clientDAO==null){
+        if(commandeClientDAO==null){
             errors.add("le code est un champ obligatoire");
-            errors.add("le date de commande est un champ obligatoire");
             errors.add("client de cette commande n'est op trouvé");
             return errors;
         }
-        if(!StringUtils.hasLength(clientDAO.getCode())){
+        if(!StringUtils.hasLength(commandeClientDAO.getCode())){
             errors.add("le code est un champ obligatoire");
         }
-        if(clientDAO.getDateCommande()==null){
-            errors.add("le date de commande est un champ obligatoire");
-        }
-        if(clientDAO.getClient()==null){
+
+        if(commandeClientDAO.getClient()==null){
             errors.add("client de cette commande n'est op trouvé");
         }
         return errors;

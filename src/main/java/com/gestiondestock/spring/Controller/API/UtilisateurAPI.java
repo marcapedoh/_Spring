@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.Controller.API;
 
+import com.gestiondestock.spring.DAO.ChangerMotDePasseUtilisateurDAO;
 import com.gestiondestock.spring.DAO.UtilisateurDAO;
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.gestiondestock.spring.Constants.Utils.APP_ROOT;
+import static com.gestiondestock.spring.Constants.Utils.UTILISATEUR_ENDPOINT;
+
 @Api(APP_ROOT + "/utilisateur")
 public interface UtilisateurAPI {
     @PostMapping(value = APP_ROOT+"/utilisateur/create", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,6 +37,9 @@ public interface UtilisateurAPI {
             @ApiResponse(code=400,message = "aucun utilisateur n'est trouvé dans la base de donnée")
     })
     UtilisateurDAO findByNom(@PathVariable("nomUtilisateur") String nomUtilisateur);
+    @PostMapping(UTILISATEUR_ENDPOINT + "/update/password")
+    UtilisateurDAO changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDAO dto);
+
     @GetMapping(value = APP_ROOT+"/utilisateur/findByMailAndMotDePasse/{mail}/{motDePasse}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher un utilisateur", notes=" cette methode permet de rechercher un utilisateur par son mail et son mot de passe",response = UtilisateurDAO.class)
     @ApiResponses(value = {

@@ -1,23 +1,30 @@
 package com.gestiondestock.spring.Auth;
 import com.gestiondestock.spring.Config.JwtService;
+import com.gestiondestock.spring.Exception.EntityNotFoundException;
 import com.gestiondestock.spring.Repository.UtilisateurRepository;
 import com.gestiondestock.spring.Services.ServiceImpl.UtilisateurServiceImpl;
 import com.gestiondestock.spring.models.ERoles;
 import com.gestiondestock.spring.models.Utilisateur;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UtilisateurRepository utilisateurRepository;
-    private  final UtilisateurServiceImpl utilisateurService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -41,19 +48,16 @@ public class AuthenticationService {
                 .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
-            );
-        }catch (AuthenticationException exception){
-            throw new BadCredentialsException("Identifiants invalides.");
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        UserDetails user=utilisateurRepository.findUtilisateurByMail(request.getEmail()).orElseThrow(()-> new EntityNotFoundException("Aucun utilisateur n'es trouvé"));
+        if(!StringUtils.hasLength(user.getUsername())){
+            log.warn("le mail de ce user est nulle voila toi mm regarde: "+user.getUsername());
         }
-        var user=utilisateurRepository.findUtilisateurByMailAndMotDePasse(request.getEmail(),encodedPassword).orElseThrow();
-        var jwtToken=jwtService.generateToken(user);
-        System.out.println(jwtToken);
+        String token=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .token(token)
                 .build();
     }
 }
