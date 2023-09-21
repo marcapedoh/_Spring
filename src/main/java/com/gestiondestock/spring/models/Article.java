@@ -8,6 +8,8 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
@@ -43,6 +45,6 @@ public class Article extends AbstractEntity{
     private List<MvtStk> mvtStks;
 
     @ManyToOne
-    @JoinColumn(name = "nomUtilisateur")
+    @JoinColumn(name = "idUtilisateur")
     private Utilisateur utilisateur;
 }

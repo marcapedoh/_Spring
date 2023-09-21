@@ -46,15 +46,16 @@ public class ClientDAO {
         if(clientDAO==null){
             return null;
         }
-        return Client.builder()
-                .nom(clientDAO.getNom())
-                .prenom(clientDAO.getPrenom())
-                .ville(clientDAO.getVille())
-                .codePostale(clientDAO.getCodePostale())
-                .pays(clientDAO.getPays())
-                .email(clientDAO.getEmail())
-                .photo(clientDAO.getPhoto())
-                .numTel((clientDAO.getNumTel()))
-                .build();
+        Client client=new Client();
+        client.setId(clientDAO.getId());
+        client.setNom(clientDAO.getNom());
+        client.setPrenom(clientDAO.getPrenom());
+        client.setEmail(clientDAO.getEmail());
+        client.setPays(clientDAO.getPays());
+        client.setCodePostale(clientDAO.getCodePostale());
+        client.setPhoto(clientDAO.getPhoto());
+        client.setVille(clientDAO.getVille());
+        client.setNumTel(clientDAO.getNumTel());
+        return client;
     }
 }

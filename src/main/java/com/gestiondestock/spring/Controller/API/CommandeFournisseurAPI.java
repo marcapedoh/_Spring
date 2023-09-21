@@ -23,21 +23,21 @@ public interface CommandeFournisseurAPI {
             @ApiResponse(code = 200,message = "l'object commande fournisseur a été bien crée ou modifer")
     })
     CommandeFournisseurDAO save(@RequestBody CommandeFournisseurDAO commandeFournisseurDAO);
-    @PatchMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/update/etat/{idCommande}/{etatCommande}")
+    @PatchMapping(APP_ROOT + "/commanedeFournisseur/update/etat/{idCommande}/{etatCommande}")
     CommandeFournisseurDAO updateEtatCommande(@PathVariable("idCommande") Integer idCommande, @PathVariable("etatCommande") EtatCommande etatCommande);
 
-    @PatchMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
+    @PatchMapping(APP_ROOT + "/commanedeFournisseur/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
     CommandeFournisseurDAO updateQuantiteCommande(@PathVariable("idCommande") Integer idCommande,
                                                   @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("quantite") BigDecimal quantite);
 
-    @PatchMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/update/fournisseur/{idCommande}/{idFournisseur}")
+    @PatchMapping(APP_ROOT + "/commanedeFournisseur/update/fournisseur/{idCommande}/{idFournisseur}")
     CommandeFournisseurDAO updateFournisseur(@PathVariable("idCommande") Integer idCommande, @PathVariable("idFournisseur") Integer idFournisseur);
 
-    @PatchMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
+    @PatchMapping(APP_ROOT + "/commanedeFournisseur/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
     CommandeFournisseurDAO updateArticle(@PathVariable("idCommande") Integer idCommande,
                                          @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("idArticle") Integer idArticle);
 
-    @DeleteMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/delete/article/{idCommande}/{idLigneCommande}")
+    @DeleteMapping(APP_ROOT + "/commanedeFournisseur/delete/article/{idCommande}/{idLigneCommande}")
     CommandeFournisseurDAO deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande);
     @GetMapping(value = APP_ROOT+"/commandeFournisseur/{idCommandeFournisseur}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher une commande fournisseur", notes=" cette methode permet de rechercher une commande fournisseur par son ID",response =CommandeFournisseurDAO.class)
@@ -60,7 +60,7 @@ public interface CommandeFournisseurAPI {
     })
     List<CommandeFournisseurDAO> findAll();
 
-    @GetMapping(COMMANDE_FOURNISSEUR_ENDPOINT + "/lignesCommande/{idCommande}")
+    @GetMapping(APP_ROOT + "/commanedeFournisseur/lignesCommande/{idCommande}")
     List<LigneDeCommandeFournisseurDAO> findAllLignesCommandesFournisseurByCommandeFournisseurId(@PathVariable("idCommande") Integer idCommande);
     @DeleteMapping(value = APP_ROOT+"/commandeFournisseur/delete/{idCommandeFournisseur}")
     @ApiResponses(value = {

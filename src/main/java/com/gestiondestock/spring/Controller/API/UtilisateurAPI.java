@@ -65,4 +65,15 @@ public interface UtilisateurAPI {
             @ApiResponse(code = 200,message = "supprimer un utilisateur")
     })
     void delete(@PathVariable("idUtilisateur") Integer id);
+
+    @PutMapping(value=APP_ROOT+"/desactiverUser/{idUtilisateur}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "un utilisateur a été désactiver avec succès")
+    })
+    void desactiverUser(@PathVariable("idUtilisateur") Integer id);
+    @PutMapping(value = APP_ROOT+"/activer/{idUtilisateur}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,message = "un utilisateur a été activer avec succès")
+    })
+    void activerUser(@PathVariable("idUtilisateur") Integer id);
 }

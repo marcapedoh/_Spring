@@ -12,14 +12,14 @@ public class CommandeFournisseurValidator {
 
         if(FournisseurDAO==null){
             errors.add("le code est un champ obligatoire");
-            errors.add("le date de commande est un champ obligatoire");
+            errors.add("le fournisseur est un champ obligatoire");
             return errors;
         }
         if(!StringUtils.hasLength(FournisseurDAO.getCode())){
             errors.add("le code est un champ obligatoire");
         }
-        if(FournisseurDAO.getDateCommande()==null){
-            errors.add("le date de commande est un champ obligatoire");
+        if(FournisseurDAO.getFournisseur()==null){
+            errors.add("le fournisseur est un champ obligatoire");
         }
         return errors;
     }

@@ -32,13 +32,32 @@ public class AuthenticationService {
         var user= Utilisateur.builder()
                 .nom(request.getNom())
                 .prenom(request.getPrenom())
-                .dateNaissance(request.getDateNaissance())
                 .mail(request.getMail())
                 .photo(request.getPhoto())
                 .ville(request.getVille())
                 .pays(request.getPays())
                 .codePostale(request.getCodePostale())
                 .roles(ERoles.ROLE_USER)
+                .active(true)
+                .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
+                .build();
+        utilisateurRepository.save(user);
+        var jwtToken=jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+    public AuthenticationResponse registerConsultant(RegisterRequest request) {
+        var user= Utilisateur.builder()
+                .nom(request.getNom())
+                .prenom(request.getPrenom())
+                .mail(request.getMail())
+                .photo(request.getPhoto())
+                .ville(request.getVille())
+                .pays(request.getPays())
+                .codePostale(request.getCodePostale())
+                .active(true)
+                .roles(ERoles.ROLE_MODERATOR)
                 .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
                 .build();
         utilisateurRepository.save(user);

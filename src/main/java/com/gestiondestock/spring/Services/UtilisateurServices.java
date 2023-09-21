@@ -14,4 +14,6 @@ public interface UtilisateurServices {
     List<UtilisateurDAO> findAll();
     void delete(Integer id);
     UtilisateurDAO changerMotDePasse(ChangerMotDePasseUtilisateurDAO dto);
+    void desactiverUser(Integer id);
+    void activerUser(Integer id);
 }

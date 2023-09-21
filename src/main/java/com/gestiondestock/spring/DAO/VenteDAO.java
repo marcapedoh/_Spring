@@ -19,7 +19,7 @@ public class VenteDAO {
     private String code;
     private Instant dateVente;
     private String commentaire;
-    @JsonIgnore
+
     private List<LigneVenteDAO> ligneVente;
 
     public static VenteDAO fromEntity(Vente vente){
@@ -29,7 +29,7 @@ public class VenteDAO {
         return VenteDAO.builder()
                 .id(vente.getId())
                 .code(vente.getCode())
-                .dateVente(vente.getDateVente())
+                .dateVente(Instant.now())
                 .commentaire(vente.getCommentaire())
                 .build();
     }
@@ -37,10 +37,11 @@ public class VenteDAO {
         if(venteDAO==null){
             return null;
         }
-        return Vente.builder()
-                .code(venteDAO.getCode())
-                .dateVente(venteDAO.getDateVente())
-                .commentaire(venteDAO.getCommentaire())
-                .build();
+        Vente vente=new Vente();
+        vente.setId(venteDAO.getId());
+        vente.setCode(venteDAO.getCode());
+        vente.setDateVente(Instant.now());
+        vente.setCommentaire(venteDAO.getCommentaire());
+        return vente;
     }
 }

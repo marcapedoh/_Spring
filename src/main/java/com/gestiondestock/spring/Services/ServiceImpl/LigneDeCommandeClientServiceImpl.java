@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @EnableWebMvc
 @EnableAutoConfiguration
+@Transactional
 public class LigneDeCommandeClientServiceImpl implements LigneDeCommandeClientServices {
     private LigneDeCommandeClientRepository ligneDeCommandeClientRepository;
     private ArticleRepository articleRepository;

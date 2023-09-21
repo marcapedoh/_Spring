@@ -47,7 +47,6 @@ public class MvtStkDAO {
         mvtStk.setArticle(ArticleDAO.toEntity(mvtStkDAO.getArticle()));
         mvtStk.setTypeMvt(mvtStkDAO.getTypeMvt());
         mvtStk.setSourceMvtStk(mvtStkDAO.getSourceMvtStk());
-
         return mvtStk;
     }
     public boolean isCommandeLivreePartiellement() {

@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.DAO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gestiondestock.spring.models.LigneVente;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class LigneVenteDAO {
     private Integer id;
+    @JsonIgnore
     private VenteDAO ventes;
     private ArticleDAO article;
     private BigDecimal quantite;
@@ -24,7 +26,6 @@ public class LigneVenteDAO {
         }
         return LigneVenteDAO.builder()
                 .id(ligneVente.getId())
-                .ventes(VenteDAO.fromEntity(ligneVente.getVentes()))
                 .article(ArticleDAO.fromEntity(ligneVente.getArticle()))
                 .quantite(ligneVente.getQuantite())
                 .prixUnitaire(ligneVente.getPrixUnitaire())
@@ -35,12 +36,12 @@ public class LigneVenteDAO {
         if(ligneVenteDAO==null){
             return null;
         }
-        return LigneVente.builder()
-                .ventes(VenteDAO.toEntity(ligneVenteDAO.getVentes()))
-                .article(ArticleDAO.toEntity(ligneVenteDAO.getArticle()))
-                .quantite(ligneVenteDAO.getQuantite())
-                .prixUnitaire(ligneVenteDAO.getPrixUnitaire())
-                .build();
+        LigneVente ligneVente=new LigneVente();
+        ligneVente.setId(ligneVenteDAO.getId());
+        ligneVente.setArticle(ArticleDAO.toEntity(ligneVenteDAO.getArticle()));
+        ligneVente.setQuantite(ligneVenteDAO.getQuantite());
+        ligneVente.setPrixUnitaire(ligneVenteDAO.getPrixUnitaire());
+        return ligneVente;
 
     }
 }

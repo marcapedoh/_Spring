@@ -61,4 +61,14 @@ public class UtilisateurController implements UtilisateurAPI {
     public void delete(Integer id) {
         utilisateurServices.delete(id);
     }
+
+    @Override
+    public void desactiverUser(Integer id) {
+        utilisateurServices.desactiverUser(id);
+    }
+
+    @Override
+    public void activerUser(Integer id) {
+        this.utilisateurServices.activerUser(id);
+    }
 }

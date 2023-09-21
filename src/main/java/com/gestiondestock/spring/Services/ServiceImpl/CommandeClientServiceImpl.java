@@ -11,10 +11,12 @@ import com.gestiondestock.spring.Services.MvtStkServices;
 import com.gestiondestock.spring.Validator.ArticleValidator;
 import com.gestiondestock.spring.Validator.CommandeClientValidator;
 import com.gestiondestock.spring.models.*;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -29,9 +31,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableWebMvc
 @EnableAutoConfiguration
+@Transactional
 public class CommandeClientServiceImpl implements CommandeClientServices {
-    private CommandeFournisseurRepository commandeFournisseurRepository;
-
     private LigneDeCommandeClientRepository ligneDeCommandeClientRepository;
     private CommandeClientRepository commandeClientRepository;
     private ClientRepository clientRepository;
@@ -44,7 +45,6 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
         this.ligneDeCommandeClientRepository=ligneDeCommandeClientRepository;
         this.commandeClientRepository=commandeClientRepository;
         this.articleRepository=articleRepository;
-        this.commandeFournisseurRepository = commandeFournisseurRepository;
         this.mvtStkServices=mvtStkServices;
     }
     @Override
@@ -56,8 +56,8 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
         if(commandeClientDAO.getId()!=null && commandeClientDAO.isCommandeLivree()){
             throw new InvalidOperationException("Impossible de modifer la commande lorsqu'elle est livree",ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
-        Optional<Client> client=clientRepository.findById(commandeClientDAO.getClient().getId());
-        if(client.isEmpty()){
+            Optional<Client> client=clientRepository.findById(commandeClientDAO.getClient().getId());
+        if(client==null){
             log.warn("aucun client n'est trouvé dans la base de donnée pour cet id {}",commandeClientDAO.getClient().getId());
             throw new EntityNotFoundException("object non trouvé",ErrorCodes.Client_Not_Found);
         }
@@ -80,9 +80,9 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
         }
         commandeClientDAO.setDateCommande(Instant.now());
         CommandeClient commandeClient = CommandeClientDAO.toEntity(commandeClientDAO);
-        Client clientFound = client.orElseThrow(() -> new EntityNotFoundException("Client non trouvé"));
+       Client clientFound = client.orElseThrow(() -> new EntityNotFoundException("Client non trouvé"));
         commandeClient.setClient(clientFound);
-        CommandeClient commandeClientSaved=commandeClientRepository.save(CommandeClientDAO.toEntity(commandeClientDAO));
+        CommandeClient commandeClientSaved=commandeClientRepository.save(CommandeClientDAO.toEntity(CommandeClientDAO.fromEntity(commandeClient)));
 
         if(commandeClientDAO.getListeCommandeClient()!=null){
             commandeClientDAO.getListeCommandeClient().forEach(ligneDeCommandeClient -> {
@@ -92,6 +92,7 @@ public class CommandeClientServiceImpl implements CommandeClientServices {
                 effectuerSortie(ligneDeCommandeClient2);
             });
         }
+
         return CommandeClientDAO.fromEntity(commandeClientSaved);
     }
 

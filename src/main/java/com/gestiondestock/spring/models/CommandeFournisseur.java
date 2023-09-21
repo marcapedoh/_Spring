@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.models;
 
+import com.gestiondestock.spring.Repository.LivraisonRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,13 +18,18 @@ public class CommandeFournisseur extends AbstractEntity{
     private String code;
     @Column(name = "dateCommande")
     private Instant dateCommande;
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idFournisseur")
+    @ManyToOne
+    @JoinColumn(name = "idfournisseur")
     private Fournisseur fournisseur;
     @Column(name = "EtatCommande")
-    /*@Enumerated(EnumType.STRING)*/
+    @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
-    @OneToMany(mappedBy = "commandeFournisseurs")
+    @OneToMany(mappedBy = "commandeFournisseur")
+    private List<Livraison> livraison;
+    @OneToMany(mappedBy = "commandeFournisseurs",cascade = CascadeType.MERGE)
     private List<LigneDeCommandeFournisseur> ligneCommandeFournisseurs;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 
 }

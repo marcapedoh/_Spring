@@ -1,8 +1,6 @@
 package com.gestiondestock.spring.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -27,9 +25,13 @@ public class Fournisseur extends  AbstractEntity{
     private String codePostale;
     @Column(name = "Pays")
     private String pays;
-
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
     @Column(name = "numTel")
     private String numTel;
+    @OneToMany(mappedBy = "fournisseur")
+    private List<Livraison> livraison;
     @OneToMany(mappedBy = "fournisseur")
     private List<CommandeFournisseur> commandeFournisseurs;
 

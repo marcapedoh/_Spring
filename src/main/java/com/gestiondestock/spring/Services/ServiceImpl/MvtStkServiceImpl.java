@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.Services.ServiceImpl;
 
+import com.gestiondestock.spring.DAO.LivraisonDAO;
 import com.gestiondestock.spring.DAO.MvtStkDAO;
 import com.gestiondestock.spring.Exception.ErrorCodes;
 import com.gestiondestock.spring.Exception.InvalidEntityException;
@@ -50,7 +51,7 @@ public class MvtStkServiceImpl implements MvtStkServices {
     public MvtStkDAO entreeStock(MvtStkDAO mvtStkDAO) {
         List<String> error= MvtStkValidator.validate(mvtStkDAO);
         if(!error.isEmpty()){
-            log.error("article not found {}",mvtStkDAO);
+            log.error("mvtstk not valid {}",mvtStkDAO);
             throw new InvalidEntityException("le mouvement de stock est non valide", ErrorCodes.MVT_STK_Not_Valid,error);
         }
         mvtStkDAO.setQuantite(BigDecimal.valueOf(Math.abs(mvtStkDAO.getQuantite().doubleValue())));
@@ -62,7 +63,7 @@ public class MvtStkServiceImpl implements MvtStkServices {
     public MvtStkDAO sortieStock(MvtStkDAO mvtStkDAO) {
         List<String> error= MvtStkValidator.validate(mvtStkDAO);
         if(!error.isEmpty()){
-            log.error("article not found {}",mvtStkDAO);
+            log.error("mvtstk not valid {}",mvtStkDAO);
             throw new InvalidEntityException("le mouvement de stock est non valide", ErrorCodes.MVT_STK_Not_Valid,error);
         }
         mvtStkDAO.setQuantite(BigDecimal.valueOf(Math.abs(mvtStkDAO.getQuantite().doubleValue())*(-1)));
@@ -74,7 +75,7 @@ public class MvtStkServiceImpl implements MvtStkServices {
     public MvtStkDAO correctionStockPos(MvtStkDAO mvtStkDAO) {
         List<String> error= MvtStkValidator.validate(mvtStkDAO);
         if(!error.isEmpty()){
-            log.error("article not found {}",mvtStkDAO);
+            log.error("mouvement not valid {}",mvtStkDAO);
             throw new InvalidEntityException("le mouvement de stock est non valide", ErrorCodes.MVT_STK_Not_Valid,error);
         }
         mvtStkDAO.setQuantite(BigDecimal.valueOf(Math.abs(mvtStkDAO.getQuantite().doubleValue())));
@@ -83,13 +84,21 @@ public class MvtStkServiceImpl implements MvtStkServices {
     }
 
     @Override
+    public List<MvtStkDAO> findAll() {
+        return mvtStkRepository.findAll().stream()
+                .map(MvtStkDAO::fromEntity)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
     public MvtStkDAO correctionStockNeg(MvtStkDAO mvtStkDAO) {
         List<String> error= MvtStkValidator.validate(mvtStkDAO);
         if(!error.isEmpty()){
-            log.error("article not found {}",mvtStkDAO);
+            log.error("mouvement not valid {}",mvtStkDAO);
             throw new InvalidEntityException("le mouvement de stock est non valide", ErrorCodes.MVT_STK_Not_Valid,error);
         }
-        mvtStkDAO.setQuantite(BigDecimal.valueOf(Math.abs(mvtStkDAO.getQuantite().doubleValue())));
+        mvtStkDAO.setQuantite(BigDecimal.valueOf(Math.abs(mvtStkDAO.getQuantite().doubleValue()*-1)));
         mvtStkDAO.setTypeMvt(TypeMvtStk.CORRECTION_NEG);
         return MvtStkDAO.fromEntity(mvtStkRepository.save(MvtStkDAO.toEntity(mvtStkDAO)));
     }

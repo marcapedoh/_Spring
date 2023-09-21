@@ -133,6 +133,31 @@ public class UtilisateurServiceImpl implements UtilisateurServices {
                 utilisateurRepository.save(utilisateur)
         );
     }
+
+    @Override
+    public void desactiverUser(Integer id) {
+        Optional<Utilisateur> optionalUser = utilisateurRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            Utilisateur user = optionalUser.get();
+            user.setActive(false);
+            utilisateurRepository.save(user);
+        } else {
+            throw new EntityNotFoundException("Utilisateur introuvable avec l'ID : " + id);
+        }
+    }
+
+    @Override
+    public void activerUser(Integer id) {
+        Optional<Utilisateur> user=utilisateurRepository.findById(id);
+        if(user.isPresent()){
+           Utilisateur user1= user.get();
+            user1.setActive(true);
+            utilisateurRepository.save(user1);
+        }else{
+            throw new EntityNotFoundException("Utilisateur introuvable avec l'ID : " + id);
+        }
+    }
+
     private void validate(ChangerMotDePasseUtilisateurDAO dto) {
         if (dto == null) {
             log.warn("Impossible de modifier le mot de passe avec un objet NULL");

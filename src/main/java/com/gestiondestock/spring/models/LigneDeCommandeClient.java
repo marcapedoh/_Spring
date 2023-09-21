@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 public class LigneDeCommandeClient extends AbstractEntity{
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "idArticle")
     private Article article;
 

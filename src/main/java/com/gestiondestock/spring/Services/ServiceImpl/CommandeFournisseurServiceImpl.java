@@ -78,14 +78,18 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
             log.warn("");
             throw new InvalidEntityException("l'article n'existe pas dans la base de donnée", ErrorCodes.Article_Not_Valid,articlesErrors);
         }
-        CommandeFournisseur commandeFournisseur = CommandeFournisseurDAO.toEntity(commandeFournisseurDAO);
+        commandeFournisseurDAO.setDateCommande(Instant.now());
+        //CommandeFournisseur commandeFournisseur = CommandeFournisseurDAO.toEntity(commandeFournisseurDAO);
         Fournisseur fournisseur1 = fournisseur.orElseThrow(() -> new EntityNotFoundException("Fourniseur non trouvé"));
-        commandeFournisseur.setFournisseur(fournisseur1);
+        //commandeFournisseur.setFournisseur(fournisseur1);
+        CommandeFournisseur commandeFournisseur =commandeFournisseurRepository.save(CommandeFournisseurDAO.toEntity(commandeFournisseurDAO));
+
         if(commandeFournisseurDAO.getLigneCommandeFournisseurs()!=null){
             commandeFournisseurDAO.getLigneCommandeFournisseurs().forEach(ligCmdfrs -> {
                 LigneDeCommandeFournisseur ligneDeCommandeFournisseur1=LigneDeCommandeFournisseurDAO.toEntity(ligCmdfrs);
                 ligneDeCommandeFournisseur1.setCommandeFournisseurs(commandeFournisseur);
-                ligneDeCommandeFournisseurRepository.save(ligneDeCommandeFournisseur1);
+                LigneDeCommandeFournisseur ligneDeCommandeFournisseur2=  ligneDeCommandeFournisseurRepository.save(ligneDeCommandeFournisseur1);
+                effectuerEntree(ligneDeCommandeFournisseur2);
             });
         }
         return CommandeFournisseurDAO.fromEntity(commandeFournisseurRepository.save(commandeFournisseur));

@@ -1,13 +1,23 @@
 package com.gestiondestock.spring.Config;
 
 import com.flickr4java.flickr.Flickr;
+import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.RequestContext;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.Permission;
+import com.github.scribejava.apis.FlickrApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.github.scribejava.core.oauth.OAuth10aService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 @Configuration
 public class FlickrConfiguration {
@@ -19,8 +29,10 @@ public class FlickrConfiguration {
     private String appKey;
     @Value("${flickr.appSecret}")
     private String appSecret;
-
-    /*public Flickr getFlickr() throws IOException, ExecutionException, InterruptedException, FlickrException {
+    /*private String apiKey="84bebce65c1de892093ab934b7ce4e6f";
+    private String apiSecret="222e18eff02d08a2";*/
+   /* @Bean
+    public Flickr getFlickr() throws IOException, ExecutionException, InterruptedException, FlickrException {
         Flickr flickr=new Flickr(apiKey,apiSecret,new REST());
         OAuth10aService service=new ServiceBuilder(apiKey)
                 .apiSecret(apiSecret)

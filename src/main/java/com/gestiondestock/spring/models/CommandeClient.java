@@ -1,6 +1,7 @@
 package com.gestiondestock.spring.models;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -15,15 +16,18 @@ import java.util.List;
 public class CommandeClient extends AbstractEntity{
     @Column(name = "code")
     private String code;
-    @CreatedDate
     @Column(name = "dateCommande")
     private Instant dateCommande;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "idclient")
     private Client client;
     @Column(name = "EtatCommande")
-    /*@Enumerated(EnumType.STRING)*/
+    @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;
-    @OneToMany(mappedBy = "commandeClient")
+    @OneToMany(mappedBy = "commandeClient",cascade = CascadeType.MERGE)
     private List<LigneDeCommandeClient> listeCommandeClient;
+
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 }

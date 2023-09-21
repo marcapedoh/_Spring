@@ -40,7 +40,9 @@ public enum ErrorCodes {
     Ligne_Commande_client_ALREADY_IN_USE(14002),
     Ligne_Commande_Fournisseur_ALREADY_IN_USE(14003),
     LIGNE_VENTE_NOT_VALID(14004),
-    Ligne_VENTE_ALREADY_IN_USE(14005);
+    LIVRAISON_NOT_FOUND(14005),
+    LIVRAISON_IS_ALREADY_USE(14006),
+    Ligne_VENTE_ALREADY_IN_USE(14007);
 
 
     private int code;

@@ -50,20 +50,40 @@ public class VenteServiceImpl implements VenteServices {
             log.error("Ventes n'est pas valide");
             throw new InvalidEntityException("L'objet vente n'est pas valide", ErrorCodes.Vente_Not_Valid, errors);
         }
+        List<String> articleErrors = new ArrayList<>();
 
-        return VenteDAO.fromEntity(ventesRepository.save(VenteDAO.toEntity(dto)));
-    }
+        dto.getLigneVente().forEach(ligneVenteDto -> {
+            Optional<Article> article = articleRepository.findById(ligneVenteDto.getArticle().getId());
+            if (article.isEmpty()) {
+                articleErrors.add("Aucun article avec l'ID " + ligneVenteDto.getArticle().getId() + " n'a ete trouve dans la BDD");
+            }
+        });
 
-   /* private void updateMvtStk(LigneVente ligneVente) {
-        MvtStkDAO mvtStkDto = MvtStkDAO.builder()
+        if (!articleErrors.isEmpty()) {
+            log.error("One or more articles were not found in the DB, {}", errors);
+            throw new InvalidEntityException("Un ou plusieurs articles n'ont pas ete trouve dans la BDD", ErrorCodes.Vente_Not_Valid, errors);
+        }
+
+        Vente savedVentes = ventesRepository.save(VenteDAO.toEntity(dto));
+
+        dto.getLigneVente().forEach(ligneVenteDto -> {
+            LigneVente ligneVente = LigneVenteDAO.toEntity(ligneVenteDto);
+            ligneVente.setVentes(savedVentes);
+            LigneVente ligneVente1= ligneVenteRepository.save(ligneVente);
+            updateMvtStk(ligneVente1);
+        });
+        return VenteDAO.fromEntity(savedVentes); }
+
+    private void updateMvtStk(LigneVente ligneVente) {
+        MvtStkDAO mvtStkDAO = MvtStkDAO.builder()
                 .article(ArticleDAO.fromEntity(ligneVente.getArticle()))
                 .dateMvt(Instant.now())
                 .typeMvt(TypeMvtStk.Sortie)
                 .sourceMvtStk(SourceMvtStk.VENTE)
                 .quantite(ligneVente.getQuantite())
                 .build();
-        mvtStkService.sortieStock(mvtStkDto);
-    }*/
+        mvtStkService.sortieStock(mvtStkDAO);
+    }
 
     @Override
     public VenteDAO findById(Integer id) {

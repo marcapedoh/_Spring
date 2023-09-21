@@ -23,21 +23,21 @@ public interface CommandeClientAPI {
             @ApiResponse(code = 200,message = "l'object commande client a été bien crée ou modifer")
     })
     CommandeClientDAO save(@RequestBody CommandeClientDAO commandeClientDAO);
-    @PatchMapping(APP_ROOT + "/commandesclients/update/etat/{idCommande}/{etatCommande}")
+    @PutMapping(APP_ROOT + "/commandeClient/update/etat/{idCommande}/{etatCommande}")
     ResponseEntity<CommandeClientDAO> updateEtatCommande(@PathVariable("idCommande") Integer idCommande, @PathVariable("etatCommande") EtatCommande etatCommande);
 
-    @PatchMapping(APP_ROOT + "/commandesclients/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
+    @PutMapping(APP_ROOT + "/commandeClient/update/quantite/{idCommande}/{idLigneCommande}/{quantite}")
     ResponseEntity<CommandeClientDAO> updateQuantiteCommande(@PathVariable("idCommande") Integer idCommande,
                                                              @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("quantite") BigDecimal quantite);
 
-    @PatchMapping(APP_ROOT + "/commandesclients/update/client/{idCommande}/{idClient}")
+    @PutMapping(APP_ROOT + "/commandeClient/update/client/{idCommande}/{idClient}")
     ResponseEntity<CommandeClientDAO> updateClient(@PathVariable("idCommande") Integer idCommande, @PathVariable("idClient") Integer idClient);
 
-    @PatchMapping(APP_ROOT + "/commandesclients/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
+    @PutMapping(APP_ROOT + "/commandeClient/update/article/{idCommande}/{idLigneCommande}/{idArticle}")
     ResponseEntity<CommandeClientDAO> updateArticle(@PathVariable("idCommande") Integer idCommande,
                                                     @PathVariable("idLigneCommande") Integer idLigneCommande, @PathVariable("idArticle") Integer idArticle);
 
-    @DeleteMapping(APP_ROOT + "/commandesclients/delete/article/{idCommande}/{idLigneCommande}")
+    @DeleteMapping(APP_ROOT + "/commandeClient/delete/article/{idCommande}/{idLigneCommande}")
     ResponseEntity<CommandeClientDAO> deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande);
     @GetMapping(value = APP_ROOT+"/commandeClient/{idCommandeClient}",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher une commande client", notes=" cette methode permet de rechercher une commande client par son ID",response =CommandeClientDAO.class)
@@ -64,6 +64,6 @@ public interface CommandeClientAPI {
             @ApiResponse(code = 200,message = "supprimer une commande client")
     })
     void delete(@PathVariable("idCommandeClient") Integer id);
-    @GetMapping(APP_ROOT + "/commandesclients/lignesCommande/{idCommande}")
+    @GetMapping(APP_ROOT + "/commandeClient/lignesCommande/{idCommande}")
     ResponseEntity<List<LigneDeCommandeClientDAO>> findAllLignesCommandesClientByCommandeClientId(@PathVariable("idCommande") Integer idCommande);
 }

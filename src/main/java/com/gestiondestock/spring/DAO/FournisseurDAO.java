@@ -53,16 +53,17 @@ public class FournisseurDAO {
         if(fournisseurDAO==null){
             return null;
         }
-        return Fournisseur.builder()
-                .nom(fournisseurDAO.getNom())
-                .prenom(fournisseurDAO.getPrenom())
-                .ville(fournisseurDAO.getVille())
-                .codePostale(fournisseurDAO.getCodePostale())
-                .pays(fournisseurDAO.getPays())
-                .email(fournisseurDAO.getEmail())
-                .photo(fournisseurDAO.getPhoto())
-                .numTel(fournisseurDAO.getNumTel())
-                .build();
+        Fournisseur fournisseur =new Fournisseur();
+        fournisseur.setId(fournisseurDAO.getId());
+        fournisseur.setNom(fournisseurDAO.getNom());
+        fournisseur.setEmail(fournisseurDAO.getEmail());
+        fournisseur.setPays(fournisseurDAO.getPays());
+        fournisseur.setVille(fournisseurDAO.getVille());
+        fournisseur.setPhoto(fournisseurDAO.getPhoto());
+        fournisseur.setPrenom(fournisseurDAO.getPrenom());
+        fournisseur.setNumTel(fournisseurDAO.getNumTel());
+        fournisseur.setCodePostale(fournisseurDAO.getCodePostale());
+        return fournisseur;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.Services;
 
+import com.gestiondestock.spring.Email.EmailResponse;
 import jakarta.mail.*;
 import jakarta.mail.internet.MimeMultipart;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 @Slf4j
@@ -35,7 +42,7 @@ public class EmailService {
             message.setText(text);
             mailSender.send(message);
         }else{
-            log.warn("Format de eamil non valide");
+            log.warn("Format de email non valide");
         }
     }
     private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws Exception {
@@ -52,7 +59,9 @@ public class EmailService {
         return result.toString();
     }
 
-    public void receiveEmails() {
+    public List<EmailResponse> receiveEmails() {
+        List<EmailResponse> ResponseGmailBox= new ArrayList<>();
+        String contentString="";
         try {
             Properties props = new Properties();
             props.setProperty("mail.store.protocol", "imaps");
@@ -68,15 +77,33 @@ public class EmailService {
             for (Message message : messages) {
                 // Traitez chaque e-mail ici
                 String subject = message.getSubject();
-                String content = getTextFromMimeMultipart((MimeMultipart) message.getContent());
+                if(message.getContent() instanceof String){
+                    contentString= (String) message.getContent();
+                }else if(message.getContent() instanceof MimeMultipart){
+                     contentString = getTextFromMimeMultipart((MimeMultipart) message.getContent());
+                }
                 //String content = message.getContent().toString();
-                System.out.println("Subject: " + subject);
-                System.out.println("Content: " + content);
+                List<String> images = extractImagesFromContent(contentString);
+            /*    System.out.println("Subject: " + subject);
+                System.out.println("Content: " + content);*/
+                ResponseGmailBox.add(new EmailResponse(subject,contentString,images));
             }
             inbox.close(false);
             store.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ResponseGmailBox ;
+    }
+
+    private List<String> extractImagesFromContent(String content) {
+        List<String> images = new ArrayList<>();
+        Document doc = Jsoup.parse(content);
+        Elements imgTags = doc.select("img");
+        for (Element imgTag : imgTags) {
+            String imageUrl = imgTag.attr("src");
+            images.add(imageUrl);
+        }
+        return images;
     }
 }

@@ -22,10 +22,6 @@ public class UtilisateurValidator {
             errors.add("Vous devez ajouter un utilisateur!");
             return errors;
         }
-
-        if(utilisateurDAO.getDateNaissance()==null){
-            errors.add("Veuillez entrez une valeur pour la date de naissance de l'utilisateur");
-        }
         if(!StringUtils.hasLength(utilisateurDAO.getNom())){
             errors.add("Vous devez ajouter un nom!");
         }

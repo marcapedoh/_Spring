@@ -22,9 +22,6 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
     @Column(name = "prenom")
     private String prenom;
 
-    @Column(name = "dateNaissance")
-    private String dateNaissance;
-
     @Column(name ="mail")
     private String mail;
 
@@ -40,9 +37,10 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
     @Column(name = "Pays")
     private String pays;
     @Column(name = "roleUser")
-    /*@Enumerated(EnumType.STRING)*/
+    @Enumerated(EnumType.STRING)
     private ERoles roles;
-
+    @Column(name = "isActived")
+    private boolean active;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(roles.name()));

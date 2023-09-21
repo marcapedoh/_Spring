@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableWebMvc
 @EnableAutoConfiguration
+@Transactional
 public class ArticleServiceImpl implements ArticleServices {
     private ArticleRepository articleRepository;
     private LigneVenteRepository venteRepository;

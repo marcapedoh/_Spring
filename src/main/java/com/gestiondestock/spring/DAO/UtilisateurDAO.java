@@ -15,14 +15,12 @@ public class UtilisateurDAO {
     private Integer id;
     private String nom;
     private String prenom;
-    private String dateNaissance;
     private String mail;
     private String motDePasse;
     private String photo;
-
     private String ville;
     private String codePostale;
-
+    private boolean active;
     private String pays;
     private ERoles roles;
 
@@ -34,11 +32,12 @@ public class UtilisateurDAO {
                 .id(utilisateur.getId())
                 .nom(utilisateur.getNom())
                 .prenom(utilisateur.getPrenom())
-                .dateNaissance(utilisateur.getDateNaissance())
                 .mail(utilisateur.getMail())
                 .motDePasse(utilisateur.getMotDePasse())
                 .photo(utilisateur.getPhoto())
                 .ville(utilisateur.getVille())
+                .active(utilisateur.isActive())
+                .roles(utilisateur.getRoles())
                 .codePostale(utilisateur.getCodePostale())
                 .pays(utilisateur.getPays())
                 .build();
@@ -51,11 +50,12 @@ public class UtilisateurDAO {
         return Utilisateur.builder()
                 .nom(utilisateurDAO.getNom())
                 .prenom(utilisateurDAO.getPrenom())
-                .dateNaissance(utilisateurDAO.getDateNaissance())
                 .mail(utilisateurDAO.getMail())
                 .motDePasse(utilisateurDAO.getMotDePasse())
                 .photo(utilisateurDAO.getPhoto())
                 .ville(utilisateurDAO.getVille())
+                .active(utilisateurDAO.active)
+                .roles(utilisateurDAO.getRoles())
                 .codePostale(utilisateurDAO.getCodePostale())
                 .pays(utilisateurDAO.getPays())
                 .build();

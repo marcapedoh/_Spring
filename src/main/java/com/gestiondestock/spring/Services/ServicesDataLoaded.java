@@ -34,9 +34,9 @@ public class ServicesDataLoaded {
         int retour2= jdbcTemplate.queryForObject(nombreTotalClientSql, Integer.class);
         log.warn("retour du nombre des clients en bd "+retour2);
         log.warn("le nombre de client moyen par commande est: "+((int) Math.floor(retour1/retour2)));
-        return (int) Math.floor(retour1/retour2) ;
+        return (int) Math.floor(retour1/retour2) +retour2;
     }
-    public String getArticleAvecStockQuiDiminueVite() {
+    public int getArticleAvecStockQuiDiminueVite() {
         String sql = "SELECT id_article\n" +
                 "FROM ligne_de_commande_client\n" +
                 "WHERE creation_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)\n" +
@@ -48,12 +48,13 @@ public class ServicesDataLoaded {
         if (idArticle != 0) {
             Optional<Article> article = articleRepository.findById(idArticle);
             if (article.isPresent()) {
-                return "L'article susceptible de vite finir dans votre stock est : " + article.get().getCodeArticle();
+
+                return idArticle;
             } else {
-                return "Article introuvable";
+                return 0;
             }
         } else {
-            return "Aucun article trouvé";
+            return -1;
         }
     }
 

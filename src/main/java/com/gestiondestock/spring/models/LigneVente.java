@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 public class LigneVente extends AbstractEntity{
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idvente")
+    @ManyToOne
+    @JoinColumn(name = "idventes")
     private Vente ventes;
 
     @ManyToOne

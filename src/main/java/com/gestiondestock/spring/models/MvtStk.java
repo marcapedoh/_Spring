@@ -12,7 +12,7 @@ import java.time.Instant;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 public class MvtStk extends AbstractEntity{
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "idArticle")
     private Article article;
 
@@ -21,11 +21,14 @@ public class MvtStk extends AbstractEntity{
 
     @Column(name = "quantite")
     private BigDecimal quantite;
-    @Column(name = "idEntreprise")
-    private Integer idEntreprise;
     @Column(name = "typeMvt")
+    @Enumerated(EnumType.STRING)
     private TypeMvtStk typeMvt;
 
     @Column(name = "sourceDeMouvement")
+    @Enumerated(EnumType.STRING)
     private SourceMvtStk sourceMvtStk;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 }

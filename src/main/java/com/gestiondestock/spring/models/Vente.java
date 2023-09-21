@@ -1,9 +1,6 @@
 package com.gestiondestock.spring.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
@@ -21,6 +18,9 @@ public class Vente extends AbstractEntity{
     private Instant dateVente;
     @Column(name = "commentaire")
     private String commentaire;
-    @OneToMany(mappedBy = "ventes",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "ventes",cascade = CascadeType.ALL)
     private List<LigneVente>ligneVentes;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 }

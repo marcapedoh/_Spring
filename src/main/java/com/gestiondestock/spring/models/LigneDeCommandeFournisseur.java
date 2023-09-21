@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 public class LigneDeCommandeFournisseur extends  AbstractEntity{
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "idArticle")
     private Article article;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idCommandeFournisseur")
+    @JoinColumn(name = "idcommandeFournisseurs")
     private CommandeFournisseur commandeFournisseurs;
 
     @Column(name = "quantite")

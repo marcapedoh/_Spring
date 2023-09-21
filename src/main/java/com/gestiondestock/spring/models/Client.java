@@ -1,8 +1,6 @@
 package com.gestiondestock.spring.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -34,4 +32,7 @@ public class Client extends AbstractEntity{
     private String numTel;
     @OneToMany(mappedBy = "client")
     private List<CommandeClient> listeCommande;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 }

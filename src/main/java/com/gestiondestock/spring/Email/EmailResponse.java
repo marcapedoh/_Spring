@@ -1,4 +1,4 @@
-package com.gestiondestock.spring.Auth;
+package com.gestiondestock.spring.Email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
 @Builder
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
-public class EmailRequest {
-    private String to;
+public class EmailResponse {
     private String subject;
-    private String text;
+    private String content;
+    private List<String> images;
 }

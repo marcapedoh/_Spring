@@ -1,5 +1,6 @@
 package com.gestiondestock.spring.DAO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gestiondestock.spring.models.LigneDeCommandeFournisseur;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 public class LigneDeCommandeFournisseurDAO {
     private Integer id;
     private ArticleDAO article;
+    @JsonIgnore
     private CommandeFournisseurDAO commandeFournisseurs;
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
@@ -25,7 +27,6 @@ public class LigneDeCommandeFournisseurDAO {
         return LigneDeCommandeFournisseurDAO.builder()
                 .id(ligneDeCommandeFournisseur.getId())
                 .article(ArticleDAO.fromEntity(ligneDeCommandeFournisseur.getArticle()))
-                .commandeFournisseurs(CommandeFournisseurDAO.fromEntity(ligneDeCommandeFournisseur.getCommandeFournisseurs()))
                 .quantite(ligneDeCommandeFournisseur.getQuantite())
                 .prixUnitaire(ligneDeCommandeFournisseur.getPrixUnitaire())
                 .build();
@@ -37,7 +38,6 @@ public class LigneDeCommandeFournisseurDAO {
         }
         return LigneDeCommandeFournisseur.builder()
                 .article(ArticleDAO.toEntity(ligneDeCommandeFournisseurDAO.getArticle()))
-                .commandeFournisseurs(CommandeFournisseurDAO.toEntity(ligneDeCommandeFournisseurDAO.getCommandeFournisseurs()))
                 .quantite(ligneDeCommandeFournisseurDAO.getQuantite())
                 .prixUnitaire(ligneDeCommandeFournisseurDAO.getPrixUnitaire())
                 .build();

@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 @Builder
@@ -22,20 +24,12 @@ public class CommandeClientDAO {
     private String code;
     private Instant dateCommande;
     private ClientDAO client;
-
     private EtatCommande etatCommande;
-
     private List<LigneDeCommandeClientDAO> listeCommandeClient;
 
     public static CommandeClientDAO fromEntity(CommandeClient commandeClient){
         if(commandeClient==null){
             return  null;
-        }
-        List<LigneDeCommandeClientDAO> ligneCommandeClientDAOList = new ArrayList<>();
-        if (commandeClient.getListeCommandeClient() != null) {
-            for (LigneDeCommandeClient ligneCommandeClient : commandeClient.getListeCommandeClient()) {
-                ligneCommandeClientDAOList.add(LigneDeCommandeClientDAO.fromEntity(ligneCommandeClient));
-            }
         }
             return CommandeClientDAO.builder()
                 .id(commandeClient.getId())
@@ -43,18 +37,11 @@ public class CommandeClientDAO {
                 .dateCommande(commandeClient.getDateCommande())
                 .etatCommande(commandeClient.getEtatCommande())
                 .client(ClientDAO.fromEntity(commandeClient.getClient()))
-                .listeCommandeClient(ligneCommandeClientDAOList)
                 .build();
     }
     public static CommandeClient toEntity(CommandeClientDAO commandeClientDAO){
         if(commandeClientDAO==null){
             return null;
-        }
-        List<LigneDeCommandeClient> ligneCommandeClientList = new ArrayList<>();
-        if (commandeClientDAO.getListeCommandeClient() != null) {
-            for (LigneDeCommandeClientDAO ligneCommandeClient : commandeClientDAO.getListeCommandeClient()) {
-                ligneCommandeClientList.add(LigneDeCommandeClientDAO.toEntity(ligneCommandeClient));
-            }
         }
         CommandeClient commandeClient = new CommandeClient();
         commandeClient.setId(commandeClientDAO.getId());
@@ -62,7 +49,6 @@ public class CommandeClientDAO {
         commandeClient.setClient(ClientDAO.toEntity(commandeClientDAO.getClient()));
         commandeClient.setDateCommande(commandeClientDAO.getDateCommande());
         commandeClient.setEtatCommande(commandeClientDAO.getEtatCommande());
-        commandeClient.setListeCommandeClient(ligneCommandeClientList);
         return commandeClient;
     }
     public boolean isCommandeLivree() {

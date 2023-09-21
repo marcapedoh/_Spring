@@ -14,6 +14,7 @@ public class RegisterRequest {
     private String prenom;
     private String dateNaissance;
     private String mail;
+    private String numTel;
     private  String photo;
     private String motDePasse;
     private String ville ;

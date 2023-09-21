@@ -13,6 +13,6 @@ public interface MvtStkServices {
     MvtStkDAO sortieStock(MvtStkDAO mvtStkDAO);
 
     MvtStkDAO correctionStockPos(MvtStkDAO mvtStkDAO);
-
+    List<MvtStkDAO> findAll();
     MvtStkDAO correctionStockNeg(MvtStkDAO mvtStkDAO);
 }
