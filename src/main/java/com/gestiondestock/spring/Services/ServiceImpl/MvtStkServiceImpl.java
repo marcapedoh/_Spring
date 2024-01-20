@@ -88,7 +88,6 @@ public class MvtStkServiceImpl implements MvtStkServices {
         return mvtStkRepository.findAll().stream()
                 .map(MvtStkDAO::fromEntity)
                 .collect(Collectors.toList());
-
     }
 
     @Override

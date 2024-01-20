@@ -11,7 +11,7 @@ import static com.gestiondestock.spring.Constants.Utils.APP_ROOT;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(APP_ROOT+"/autocomplete")
+@RequestMapping(APP_ROOT)
 public class AutoCompleteController {
     private final AutoCompleteService autoCompleteService;
     @Autowired

@@ -1,6 +1,8 @@
 package com.gestiondestock.spring.Services.Strategy;
 
 import com.flickr4java.flickr.FlickrException;
+import java.io.InputStream;
+
 import com.gestiondestock.spring.DAO.ArticleDAO;
 import com.gestiondestock.spring.Exception.ErrorCodes;
 import com.gestiondestock.spring.Exception.InvalidOperationException;
@@ -11,25 +13,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.InputStream;
 @Service("articleStrategy")
 @Slf4j
-public class SaveArticlePhoto implements Strategy<ArticleDAO>{
+public class SaveArticlePhoto implements Strategy<ArticleDAO> {
+
     private FlickrService flickrService;
-    private ArticleServices articleServices;
+    private ArticleServices articleService;
+
     @Autowired
-    public SaveArticlePhoto(FlickrService flickrService, ArticleServices articleServices) {
+    public SaveArticlePhoto(FlickrService flickrService, ArticleServices articleService) {
         this.flickrService = flickrService;
-        this.articleServices = articleServices;
+        this.articleService = articleService;
     }
+
     @Override
     public ArticleDAO savePhoto(Integer id, InputStream photo, String titre) throws FlickrException {
-        ArticleDAO articleDAO=articleServices.findById(id);
-        String urlPhoto= flickrService.savePhoto(photo,titre);
-        if(!StringUtils.hasLength(urlPhoto)){
-            throw new InvalidOperationException("erreur lors de l'enregistrement de la photo de l'article", ErrorCodes.UPDATE_PHOTO_EXCEPTION);
+        ArticleDAO article = articleService.findById(id);
+        String urlPhoto = flickrService.savePhoto(photo, titre);
+        if (!StringUtils.hasLength(urlPhoto)) {
+            throw new InvalidOperationException("Erreur lors de l'enregistrement de photo de l'article", ErrorCodes.UPDATE_PHOTO_EXCEPTION);
         }
-        articleDAO.setPhoto(urlPhoto);
-        return articleServices.save(articleDAO);
+        article.setPhoto(urlPhoto);
+        return articleService.save(article);
     }
 }

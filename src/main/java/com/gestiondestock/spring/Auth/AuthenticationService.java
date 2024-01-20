@@ -28,7 +28,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request, String role) {
         var user= Utilisateur.builder()
                 .nom(request.getNom())
                 .prenom(request.getPrenom())
@@ -37,7 +37,7 @@ public class AuthenticationService {
                 .ville(request.getVille())
                 .pays(request.getPays())
                 .codePostale(request.getCodePostale())
-                .roles(ERoles.ROLE_USER)
+                .roles(ERoles.valueOf(role))
                 .active(true)
                 .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
                 .build();
@@ -47,7 +47,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    public AuthenticationResponse registerConsultant(RegisterRequest request) {
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
         var user= Utilisateur.builder()
                 .nom(request.getNom())
                 .prenom(request.getPrenom())
@@ -57,7 +57,7 @@ public class AuthenticationService {
                 .pays(request.getPays())
                 .codePostale(request.getCodePostale())
                 .active(true)
-                .roles(ERoles.ROLE_MODERATOR)
+                .roles(ERoles.ROLE_ADMIN)
                 .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
                 .build();
         utilisateurRepository.save(user);

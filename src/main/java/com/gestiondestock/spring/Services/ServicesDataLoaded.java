@@ -1,9 +1,11 @@
 package com.gestiondestock.spring.Services;
 
+import com.gestiondestock.spring.DAO.ArticleDAO;
 import com.gestiondestock.spring.Repository.ArticleRepository;
 import com.gestiondestock.spring.models.Article;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,13 @@ public class ServicesDataLoaded {
         String requeteSql="SELECT COUNT(*) AS total_Commande FROM Commande_client WHERE creation_date BETWEEN CURRENT_DATE() - INTERVAL 1 MONTH AND CURRENT_DATE();";
         log.warn("retour du nombre des clients dans le mois precedent en bd "+jdbcTemplate.queryForObject(requeteSql, Integer.class));
         return jdbcTemplate.queryForObject(requeteSql, Integer.class);
+    }
+    public List<ArticleDAO> getArticlesWithCategories() {
+        String sql = "SELECT * " +
+                "FROM article a " +
+                "JOIN category c ON a.id_category = c.id";
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ArticleDAO.class));
     }
     public int RetourAVGClientPerCommande(){
         String nombreTotalCommandeSql="SELECT COUNT(*) AS totalCommande from commande_client;";

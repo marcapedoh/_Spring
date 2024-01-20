@@ -47,7 +47,6 @@ public class CrossOriginConfiguration implements Filter {
 
     public CrossOriginConfiguration() {
     }
-
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;

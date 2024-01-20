@@ -72,7 +72,7 @@ public class ArticleServiceImpl implements ArticleServices {
         Optional<Article> article= articleRepository.findById(id);
 
         return article.map(ArticleDAO::fromEntity)
-                .orElseThrow(() -> new EntityNotFoundException("aucune article ne correspond à votre id passer en parametre", ErrorCodes.Article_Not_Valid));
+                .orElseThrow(() -> new EntityNotFoundException("aucune article ne correspond à votre id passer en parametre", ErrorCodes.Article_Not_Found));
 
     }
 
